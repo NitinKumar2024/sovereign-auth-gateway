@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  # 1. The Database Service
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db # This saves your data even if the container turns off
+
+  # 2. Your Flask Auth Gateway
+  auth-gateway:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      # We override the local config to point to the docker database!
+      - MONGO_URI=mongodb://mongodb:27017/beehive_auth
+      - SECRET_KEY=super-secret-docker-key-for-gsoc
+    depends_on:
+      - mongodb # Tells Docker to wait for the database to boot up first
+
+volumes:
+  mongo_data:
