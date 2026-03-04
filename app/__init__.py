@@ -1,6 +1,8 @@
 from flask import Flask
 from pymongo import MongoClient
 from config import Config
+from app.routes.auth_routes import auth_bp
+from app.routes.gateway_routes import gateway_bp
 
 # Initialize variables but don't connect them yet
 mongo_client = None
@@ -23,8 +25,10 @@ def create_app(config_class=Config):
     db = mongo_client[db_name]
 
     # 2. Register Blueprints (We will uncomment this in the next step)
-    # from app.routes.auth_routes import auth_bp
-    # app.register_blueprint(auth_bp, url_prefix='/api/auth')
+    app.register_blueprint(auth_bp, url_prefix='/api/auth')
+
+    # Register the Gateway Blueprint
+    app.register_blueprint(gateway_bp, url_prefix='/api/gateway')
 
     # 3. A simple health check route to prove the server is alive
     @app.route('/health')
