@@ -80,7 +80,8 @@ def login():
         "sub": str(user_record['_id']),  # Subject (User ID)
         "email": user_record['email'],
         "role": user_record['role'],
-        "exp": datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=1)
+        "exp": datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=1),
+        "iss": "beehive-issuer"
     }
     
     access_token = jwt.encode(access_payload, Config.SECRET_KEY, algorithm="HS256")
